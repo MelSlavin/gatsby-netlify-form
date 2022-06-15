@@ -1,79 +1,122 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-export default class ContactForm extends React.Component {
-  state = {
-    firstname: "",
-    lastname: "",
-    email: "",
-    phone: "",
-  };
+const encode = (data) => {
+  return Object.keys(data)
+    .map((key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+    .join("&");
+};
 
-  handleInputChange = (event) => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+const ContactForm = () => {
+  const [submitted, setSubmitted] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
 
-    this.setState({
-      [name]: value,
-    });
-  };
+  const handleSubmit = (event) => {
+    setSubmitting(true);
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: encode({
+        "form-name": "contact v1",
+        firstname,
+        lastname,
+        email,
+        phone,
+        message,
+      }),
+    })
+      .then(() => {
+        setSubmitting(false);
+        setSubmitted(
+          `Thank you ${this.state.firstname} ${this.state.lastname}!`
+        );
+      })
+      .catch((error) => alert(error));
 
-  handleSubmit = (event) => {
     event.preventDefault();
-    alert(`Thank you ${this.state.firstname} ${this.state.lastname}!`);
   };
 
-  render() {
+  if (submitting) {
     return (
-      <Wrapper
-        onSubmit={this.handleSubmit}
-        name="contact v1"
-        method="POST"
-        data-netlify="true"
-      >
-        <h2>Stateful Form</h2>
-        <Field>
-          <Label>First Name</Label>
-          <Input
-            type="text"
-            name="firstname"
-            value={this.state.firstname}
-            onChange={this.handleInputChange}
-          />
-        </Field>
-        <Field>
-          <Label>Last Name</Label>
-          <Input
-            type="text"
-            name="lastname"
-            value={this.state.lastname}
-            onChange={this.handleInputChange}
-          />
-        </Field>
-        <Field>
-          <Label>Email</Label>
-          <Input
-            type="text"
-            name="email"
-            value={this.state.email}
-            onChange={this.handleInputChange}
-          />
-        </Field>
-        <Field>
-          <Label>Phone</Label>
-          <Input
-            type="text"
-            name="phone"
-            value={this.state.phone}
-            onChange={this.handleInputChange}
-          />
-        </Field>
-        <button type="submit">Send Message</button>
-      </Wrapper>
+      <div>
+        <p>Sending message...</p>
+      </div>
     );
   }
-}
+
+  if (submitted) {
+    return (
+      <div>
+        <p>Thank you! Your message has been sent successfully!</p>
+      </div>
+    );
+  }
+
+  return (
+    <Wrapper
+      onSubmit={handleSubmit}
+      name="contact v1"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+    >
+      <input type="hidden" name="form-name" value="contact v1" />
+      <h2>Stateful Form</h2>
+      <Field>
+        <Label htmlFor="firstname">First Name</Label>
+        <Input
+          type="text"
+          name="firstname"
+          value={firstname}
+          onChange={({ target }) => setFirstname(target.value)}
+        />
+      </Field>
+      <Field>
+        <Label>Last Name</Label>
+        <Input
+          type="text"
+          name="lastname"
+          value={lastname}
+          onChange={({ target }) => setLastname(target.value)}
+        />
+      </Field>
+      <Field>
+        <Label>Email</Label>
+        <Input
+          type="email"
+          name="email"
+          value={email}
+          onChange={({ target }) => setEmail(target.value)}
+        />
+      </Field>
+      <Field>
+        <Label>Phone</Label>
+        <Input
+          type="text"
+          name="phone"
+          value={phone}
+          onChange={({ target }) => setPhone(target.value)}
+        />
+      </Field>
+      <Field>
+        <Label>Message</Label>
+        <Input
+          type="text"
+          name="message"
+          value={message}
+          onChange={({ target }) => setMessage(target.value)}
+        />
+      </Field>
+      <button type="submit">Send Message</button>
+    </Wrapper>
+  );
+};
+
+export default ContactForm;
 
 const Wrapper = styled.form`
   width: 500px;
