@@ -1,5 +1,6 @@
 import React from "react";
 import ContactForm from "../components/contact-form";
+import Form from "../components/stateful-contact-form";
 import StatelessContactForm from "../components/stateless-contact-form";
 
 export default function Home() {
@@ -7,6 +8,7 @@ export default function Home() {
     <div>
       <ContactForm />
       <StatelessContactForm />
+      <Form />
     </div>
   );
 }
