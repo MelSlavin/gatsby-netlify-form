@@ -31,13 +31,13 @@ const StatelessContactForm = () => {
   return (
     <Wrapper
       name="contact stateless v1"
-      method="POST"
+      method="post"
       data-netlify="true"
-      onSubmit="submit"
+      netlify-honeypot="bot-field"
     >
+      <input type="hidden" name="bot-field" />
+      <input type="hidden" name="form-name" value="contact" />
       <h2>Stateless Form</h2>
-      {/* On INPUT focus set the LABEL component class to "Active" */}
-      {/* When no longer in focus toggle the class again so no longer active. ONLY IF input field is empty */}
 
       {fields.map((f, index) => {
         return (
@@ -88,7 +88,6 @@ const Input = styled.input`
   border: ${({ is_active }) =>
     is_active ? "2px solid #01B3FF" : "1px solid #e6e6e6"};
   border-radius: 6px;
-  padding: 1.35rem 1.25rem; //21.6px 20px
   padding: 30px 20px 10px 18px;
   line-height: 1.4;
   appearance: none;
