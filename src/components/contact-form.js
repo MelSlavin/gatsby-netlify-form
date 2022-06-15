@@ -32,9 +32,7 @@ const ContactForm = () => {
     })
       .then(() => {
         setSubmitting(false);
-        setSubmitted(
-          `Thank you ${this.state.firstname} ${this.state.lastname}!`
-        );
+        setSubmitted("Message has been sent successfully.");
       })
       .catch((error) => alert(error));
 
