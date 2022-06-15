@@ -3,5 +3,8 @@ module.exports = {
     title: `gatsby-netlify-form`,
     siteUrl: `https://www.yourdomain.tld`,
   },
-  plugins: [],
-}
+  plugins: [
+    "gatsby-plugin-styled-components",
+    "babel-plugin-styled-components",
+  ],
+};
