@@ -14,6 +14,7 @@ const ContactForm = () => {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [subject, setSubject] = useState({ value: "choose" });
   const [message, setMessage] = useState("");
 
   const handleSubmit = (event) => {
@@ -22,7 +23,7 @@ const ContactForm = () => {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: encode({
-        "form-name": "contact v1",
+        "form-name": "v1 steribar contact",
         firstname,
         lastname,
         email,
@@ -62,8 +63,8 @@ const ContactForm = () => {
       data-netlify="true"
       data-netlify-honeypot="bot-field"
     >
-      <input type="hidden" name="form-name" value="contact v1" />
-      <h2>Stateful Form</h2>
+      <Input type="hidden" name="form-name" value="contact v1" />
+      <h2>Contact Form</h2>
       <Field>
         <Label htmlFor="firstname">First Name</Label>
         <Input
@@ -101,6 +102,27 @@ const ContactForm = () => {
         />
       </Field>
       <Field>
+        <DropdownLabel>What would you like?</DropdownLabel>
+        <Dropdown
+          value={subject}
+          onChange={({ target }) => setSubject(target.value)}
+        >
+          <option value="choose">--- Please choose a subject ---</option>
+          <option value="distributor">
+            I would like to become a distributor
+          </option>
+          <option value="quote">Quote</option>
+          <option value="support">Technical Support</option>
+          <option value="software-trial">Free Software Trial</option>
+          <option value="evaluation-unit">
+            Evaluation unit to trial in my lab
+          </option>
+          <option value="information">
+            Just gathering information right now
+          </option>
+        </Dropdown>
+      </Field>
+      <Field>
         <Label>Message</Label>
         <Input
           type="text"
@@ -136,6 +158,10 @@ const Label = styled.label`
   font-size: ${({ is_active }) => (is_active ? "14px" : "16px")};
   transition: all 0.2s ease-in-out;
 `;
+const DropdownLabel = styled(Label)`
+  position: relative;
+  top: 0px;
+`;
 const Input = styled.input`
   height: 70px;
   border: ${({ is_active }) =>
@@ -148,4 +174,9 @@ const Input = styled.input`
   width: -moz-available;
   width: -webkit-fill-available;
   width: fill-available;
+`;
+const Dropdown = styled.select`
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  padding: 10px;
 `;

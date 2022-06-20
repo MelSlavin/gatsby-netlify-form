@@ -1,14 +1,12 @@
 import React from "react";
 import ContactForm from "../components/contact-form";
-import Form from "../components/stateful-contact-form";
-import StatelessContactForm from "../components/stateless-contact-form";
+// import ContactFormTest from "../components/contact-form-test";
 
 export default function Home() {
   return (
     <div>
       <ContactForm />
-      <StatelessContactForm />
-      <Form />
+      {/* <ContactFormTest /> */}
     </div>
   );
 }
