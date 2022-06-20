@@ -23,7 +23,7 @@ const ContactForm = () => {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: encode({
-        "form-name": "v1 steribar contact",
+        "form-name": "contact v1",
         firstname,
         lastname,
         email,
