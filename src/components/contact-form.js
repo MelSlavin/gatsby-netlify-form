@@ -28,6 +28,7 @@ const ContactForm = () => {
         lastname,
         email,
         phone,
+        subject,
         message,
       }),
     })
