@@ -18,13 +18,23 @@ const ContactForm = () => {
   const [subject, setSubject] = useState({ value: "choose" });
   const [message, setMessage] = useState("");
 
+  const SubjectOptions = [
+    "--- Please choose a subject ---",
+    "I would like to become a distributor",
+    "Quote",
+    "Technical Support",
+    "Free Software Trial",
+    "Evaluation unit to trial in my lab",
+    "Just gathering information right now",
+  ];
+
   const handleSubmit = (event) => {
     setSubmitting(true);
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: encode({
-        "form-name": "contact v1",
+        "form-name": "contact test v1",
         firstname,
         lastname,
         email,
@@ -105,25 +115,17 @@ const ContactForm = () => {
       </Field>
       <Field>
         <DropdownLabel>What would you like?</DropdownLabel>
-        <Dropdown
+        <SubjectDropdown
           name="subject"
           value={subject}
           onChange={({ target }) => setSubject(target.value)}
         >
-          <option value="choose">--- Please choose a subject ---</option>
-          <option value="distributor">
-            I would like to become a distributor
-          </option>
-          <option value="quote">Quote</option>
-          <option value="support">Technical Support</option>
-          <option value="software-trial">Free Software Trial</option>
-          <option value="evaluation-unit">
-            Evaluation unit to trial in my lab
-          </option>
-          <option value="information">
-            Just gathering information right now
-          </option>
-        </Dropdown>
+          {SubjectOptions.map((subject) => (
+            <option key={subject} value={subject}>
+              {subject}
+            </option>
+          ))}
+        </SubjectDropdown>
       </Field>
       <Field>
         <Label>Message</Label>
@@ -167,6 +169,11 @@ const DropdownLabel = styled(Label)`
   position: relative;
   top: 0px;
 `;
+const SubjectDropdown = styled.select`
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  padding: 10px;
+`;
 const boxStyles = css`
   border: ${({ is_active }) =>
     is_active ? "2px solid #01B3FF" : "1px solid #e6e6e6"};
@@ -184,9 +191,4 @@ const TextArea = styled.textarea`
   ${boxStyles}
   padding-top: 60px;
   resize: vertical;
-`;
-const Dropdown = styled.select`
-  border: 1px solid #e6e6e6;
-  border-radius: 6px;
-  padding: 10px;
 `;
