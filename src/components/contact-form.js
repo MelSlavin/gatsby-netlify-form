@@ -11,21 +11,45 @@ const encode = (data) => {
 const ContactForm = () => {
   const [submitted, setSubmitted] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [subject, setSubject] = useState({ value: "choose" });
-  const [message, setMessage] = useState("");
+  const [fields, setFields] = useState({});
+
+  const Fields = [
+    {
+      name: "firstname",
+      label: "First Name",
+      type: "text",
+    },
+    {
+      name: "lastname",
+      label: "Last Name",
+      type: "text",
+    },
+    {
+      name: "email",
+      label: "Email",
+      type: "email",
+    },
+    {
+      name: "phone",
+      label: "Phone",
+      type: "text",
+    },
+    {
+      name: "subject",
+      label: "What would you like?",
+    },
+    {
+      name: "message",
+      label: "Message",
+      type: "text",
+    },
+  ];
 
   const SubjectOptions = [
-    "--- Please choose a subject ---",
-    "I would like to become a distributor",
-    "Quote",
-    "Technical Support",
-    "Free Software Trial",
-    "Evaluation unit to trial in my lab",
-    "Just gathering information right now",
+    "--- Please choose an option ---",
+    "Option 1",
+    "Option 2",
+    "Option 3",
   ];
 
   const handleSubmit = (event) => {
@@ -35,12 +59,7 @@ const ContactForm = () => {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: encode({
         "form-name": "contact v1",
-        firstname,
-        lastname,
-        email,
-        phone,
-        subject,
-        message,
+        ...fields,
       }),
     })
       .then(() => {
@@ -50,6 +69,13 @@ const ContactForm = () => {
       .catch((error) => alert(error));
 
     event.preventDefault();
+  };
+
+  const onFieldChange = ({ target }) => {
+    setFields({
+      ...fields,
+      [target.name]: target.value,
+    });
   };
 
   if (submitting) {
@@ -76,68 +102,46 @@ const ContactForm = () => {
       data-netlify-honeypot="bot-field"
     >
       <Input type="hidden" name="form-name" value="contact v1" />
+
       <h2>Contact Form</h2>
-      <Field>
-        <Label htmlFor="firstname">First Name</Label>
-        <Input
-          type="text"
-          name="firstname"
-          value={firstname}
-          onChange={({ target }) => setFirstname(target.value)}
-        />
-      </Field>
-      <Field>
-        <Label>Last Name</Label>
-        <Input
-          type="text"
-          name="lastname"
-          value={lastname}
-          onChange={({ target }) => setLastname(target.value)}
-        />
-      </Field>
-      <Field>
-        <Label>Email</Label>
-        <Input
-          type="email"
-          name="email"
-          value={email}
-          onChange={({ target }) => setEmail(target.value)}
-        />
-      </Field>
-      <Field>
-        <Label>Phone</Label>
-        <Input
-          type="text"
-          name="phone"
-          value={phone}
-          onChange={({ target }) => setPhone(target.value)}
-        />
-      </Field>
-      <Field>
-        <DropdownLabel>What would you like?</DropdownLabel>
-        <SubjectDropdown
-          name="subject"
-          value={subject}
-          onChange={({ target }) => setSubject(target.value)}
-        >
-          {SubjectOptions.map((subject) => (
-            <option key={subject} value={subject}>
-              {subject}
-            </option>
-          ))}
-        </SubjectDropdown>
-      </Field>
-      <Field>
-        <Label>Message</Label>
-        <TextArea
-          type="text"
-          name="message"
-          value={message}
-          onChange={({ target }) => setMessage(target.value)}
-          rows="10"
-          cols="30"
-        />
-      </Field>
+
+      {Fields.map(({ name, label, type }) => {
+        if (name === "subject") {
+          return (
+            <Field key={name}>
+              <DropdownLabel>{label}</DropdownLabel>
+              <SubjectDropdown name={name} onChange={onFieldChange}>
+                {SubjectOptions.map((subject) => (
+                  <option key={subject} value={subject}>
+                    {subject}
+                  </option>
+                ))}
+              </SubjectDropdown>
+            </Field>
+          );
+        }
+        if (name === "message") {
+          return (
+            <Field key={name}>
+              <Label>{label}</Label>
+              <TextArea
+                type={type}
+                name={name}
+                onChange={onFieldChange}
+                rows="10"
+                cols="30"
+              />
+            </Field>
+          );
+        }
+        return (
+          <Field key={name}>
+            <Label>{label}</Label>
+            <Input type={type} name={name} onChange={onFieldChange} />
+          </Field>
+        );
+      })}
+
       <button type="submit">Send Message</button>
     </Wrapper>
   );
@@ -161,8 +165,8 @@ const Label = styled.label`
   color: #a5a5a5;
   line-height: 1.4;
   padding: 0 18px;
-  top: ${({ is_active }) => (is_active ? "14px" : "24px")};
-  font-size: ${({ is_active }) => (is_active ? "14px" : "16px")};
+  top: 24px;
+  font-size: 16px;
   transition: all 0.2s ease-in-out;
 `;
 const DropdownLabel = styled(Label)`
@@ -175,8 +179,7 @@ const SubjectDropdown = styled.select`
   padding: 10px;
 `;
 const boxStyles = css`
-  border: ${({ is_active }) =>
-    is_active ? "2px solid #01B3FF" : "1px solid #e6e6e6"};
+  border: 1px solid #e6e6e6;
   border-radius: 6px;
   padding: 30px 20px 10px 18px;
   line-height: 1.4;
