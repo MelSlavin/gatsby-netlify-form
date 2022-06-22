@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { css } from "styled-components";
 
 const encode = (data) => {
   return Object.keys(data)
@@ -105,6 +106,7 @@ const ContactForm = () => {
       <Field>
         <DropdownLabel>What would you like?</DropdownLabel>
         <Dropdown
+          name="subject"
           value={subject}
           onChange={({ target }) => setSubject(target.value)}
         >
@@ -125,11 +127,13 @@ const ContactForm = () => {
       </Field>
       <Field>
         <Label>Message</Label>
-        <Input
+        <TextArea
           type="text"
           name="message"
           value={message}
           onChange={({ target }) => setMessage(target.value)}
+          rows="10"
+          cols="30"
         />
       </Field>
       <button type="submit">Send Message</button>
@@ -163,18 +167,23 @@ const DropdownLabel = styled(Label)`
   position: relative;
   top: 0px;
 `;
-const Input = styled.input`
-  height: 70px;
+const boxStyles = css`
   border: ${({ is_active }) =>
     is_active ? "2px solid #01B3FF" : "1px solid #e6e6e6"};
   border-radius: 6px;
   padding: 30px 20px 10px 18px;
   line-height: 1.4;
   appearance: none;
-  width: 100%;
-  width: -moz-available;
-  width: -webkit-fill-available;
   width: fill-available;
+`;
+const Input = styled.input`
+  ${boxStyles}
+  height: 70px;
+`;
+const TextArea = styled.textarea`
+  ${boxStyles}
+  padding-top: 60px;
+  resize: vertical;
 `;
 const Dropdown = styled.select`
   border: 1px solid #e6e6e6;
