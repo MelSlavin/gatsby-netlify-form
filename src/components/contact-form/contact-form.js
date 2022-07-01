@@ -178,6 +178,7 @@ const ContactForm = () => {
       name="contact v1"
       data-netlify="true"
       data-netlify-honeypot="bot-field"
+      data-netlify-recaptcha="true"
       noValidate
     >
       <Input type="hidden" name="form-name" value="contact v1" />
@@ -224,7 +225,7 @@ const ContactForm = () => {
           </Field>
         );
       })}
-
+      <div data-netlify-recaptcha="true"></div>
       <Button type="submit">Send Message</Button>
     </Wrapper>
   );
